@@ -1,0 +1,83 @@
+@import "tailwindcss";
+
+@theme {
+  --color-neon-pink: #ff007f;
+  --color-neon-cyan: #00f3ff;
+  --color-neon-purple: #bc13fe;
+  --color-neon-green: #39ff14;
+  --color-neon-yellow: #fff300;
+  --color-dark-bg: #050505;
+  --color-dark-card: #0a0a0b;
+}
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  overflow-x: hidden;
+}
+
+@layer utilities {
+  .neon-border-pink {
+    box-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f;
+    border: 1px solid #ff007f;
+  }
+
+  .neon-border-cyan {
+    box-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff;
+    border: 1px solid #00f3ff;
+  }
+
+  .neon-text-pink {
+    text-shadow: 0 0 5px #ff007f, 0 0 10px #ff007f;
+  }
+
+  .neon-text-cyan {
+    text-shadow: 0 0 5px #00f3ff, 0 0 10px #00f3ff;
+  }
+
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+
+  .transform-style-3d {
+    transform-style: preserve-3d;
+  }
+
+  .rotate-y-180 {
+    transform: rotateY(180deg);
+  }
+}
+
+/* Custom scrollbar for neon theme */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ff007f;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #bc13fe;
+}
