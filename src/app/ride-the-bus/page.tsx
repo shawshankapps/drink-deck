@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createDeck, Card as CardType, Suit, Rank } from "@/lib/game-logic";
 import { Card } from "@/components/Card";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { ChevronLeft, RefreshCcw, Info, CheckCircle2, XCircle, Crown } from "lucide-react";
+import { ChevronLeft, RefreshCcw, Info, CheckCircle2, XCircle, Crown, X } from "lucide-react";
 import Link from "next/link";
 
 type Stage = 'color' | 'higher-lower' | 'outside-inside' | 'suit' | 'finished';
@@ -18,6 +18,7 @@ export default function RideTheBusPage() {
     const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
     const [currentCard, setCurrentCard] = useState<CardType | null>(null);
     const [isFlipped, setIsFlipped] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     useEffect(() => {
         setDeck(createDeck());
@@ -126,10 +127,79 @@ export default function RideTheBusPage() {
                     <span className="text-neon-pink neon-text-pink">RIDE</span>
                     <span className="text-white/20">.THE.BUS</span>
                 </h1>
-                <button onClick={resetGame} className="p-2 glass rounded-lg text-white/60 hover:text-neon-pink transition-colors">
-                    <RefreshCcw size={20} />
-                </button>
+                <div className="flex gap-4">
+                    <button
+                        onClick={() => setShowInfo(true)}
+                        className="p-2 glass rounded-lg text-white/60 hover:text-neon-cyan transition-colors"
+                    >
+                        <Info size={20} />
+                    </button>
+                    <button onClick={resetGame} className="p-2 glass rounded-lg text-white/60 hover:text-neon-pink transition-colors">
+                        <RefreshCcw size={20} />
+                    </button>
+                </div>
             </div>
+
+            {/* Info Modal */}
+            <AnimatePresence>
+                {showInfo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            className="bg-dark-card w-full max-w-lg rounded-[40px] border border-white/10 p-8 relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 p-6">
+                                <button onClick={() => setShowInfo(false)} className="text-white/20 hover:text-white transition-colors">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <h2 className="text-3xl font-black italic tracking-tighter mb-6">
+                                <span className="text-neon-pink neon-text-pink">RIDE THE BUS</span>
+                            </h2>
+
+                            <div className="space-y-6 text-white/60">
+                                <div className="space-y-2">
+                                    <h3 className="text-white font-bold text-sm uppercase tracking-widest">How to Win</h3>
+                                    <p className="text-sm leading-relaxed">You must complete 4 stages of predictions. If you fail any stage, you drink and start over from the very beginning!</p>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h3 className="text-white font-bold text-sm uppercase tracking-widest">The Stages</h3>
+                                    <ul className="space-y-3">
+                                        <li className="flex gap-3 text-[13px] border-l-2 border-neon-pink pl-4">
+                                            <span className="text-white font-black">1. COLOR:</span>
+                                            <span>Is the card Red or Black?</span>
+                                        </li>
+                                        <li className="flex gap-3 text-[13px] border-l-2 border-neon-cyan pl-4">
+                                            <span className="text-white font-black">2. HIGHER/LOWER:</span>
+                                            <span>Is the next card Higher or Lower than the first?</span>
+                                        </li>
+                                        <li className="flex gap-3 text-[13px] border-l-2 border-white/20 pl-4">
+                                            <span className="text-white font-black">3. IN/OUT:</span>
+                                            <span>Is it between or outside your previous two cards?</span>
+                                        </li>
+                                        <li className="flex gap-3 text-[13px] border-l-2 border-neon-pink pl-4">
+                                            <span className="text-white font-black">4. SUIT:</span>
+                                            <span>Guess the exact suit (♥, ♦, ♣, ♠).</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <div className="pt-4">
+                                    <NeonButton variant="pink" onClick={() => setShowInfo(false)} className="w-full">Let's Ride!</NeonButton>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="flex flex-col items-center gap-8 md:gap-12 w-full max-w-4xl relative z-10">
                 {/* Progress Bar */}

@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { createDeck, Card as CardType, defaultRules, Rule } from "@/lib/game-logic";
 import { Card } from "@/components/Card";
 import { NeonButton } from "@/components/ui/NeonButton";
-import { ChevronLeft, Info, RefreshCcw, Edit2, Check, HelpCircle } from "lucide-react";
+import { ChevronLeft, Info, RefreshCcw, Edit2, Check, HelpCircle, X } from "lucide-react";
 import Link from "next/link";
 
 export default function RingOfFirePage() {
@@ -17,6 +17,7 @@ export default function RingOfFirePage() {
     const [selectedCardId, setSelectedCardId] = useState<string | null>(null);
     const [kingCount, setKingCount] = useState(0);
     const [gameOver, setGameOver] = useState(false);
+    const [showInfo, setShowInfo] = useState(false);
 
     // Initialize deck with positions
     useEffect(() => {
@@ -89,13 +90,18 @@ export default function RingOfFirePage() {
                     <span className="text-neon-cyan neon-text-cyan">RING</span>
                     <span className="text-white/20">.OF.FIRE</span>
                 </h1>
-
                 <div className="flex gap-4">
                     <button
                         onClick={() => setShowRuleEdit(true)}
                         className="p-2 glass rounded-lg text-white/60 hover:text-neon-cyan transition-colors"
                     >
                         <Edit2 size={20} />
+                    </button>
+                    <button
+                        onClick={() => setShowInfo(true)}
+                        className="p-2 glass rounded-lg text-white/60 hover:text-neon-cyan transition-colors"
+                    >
+                        <HelpCircle size={20} />
                     </button>
                     <button
                         onClick={resetGame}
@@ -105,6 +111,57 @@ export default function RingOfFirePage() {
                     </button>
                 </div>
             </div>
+
+            {/* Info Modal */}
+            <AnimatePresence>
+                {showInfo && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm"
+                    >
+                        <motion.div
+                            initial={{ scale: 0.9, y: 20 }}
+                            animate={{ scale: 1, y: 0 }}
+                            className="bg-dark-card w-full max-w-lg rounded-[40px] border border-white/10 p-8 relative overflow-hidden"
+                        >
+                            <div className="absolute top-0 right-0 p-6">
+                                <button onClick={() => setShowInfo(false)} className="text-white/20 hover:text-white transition-colors">
+                                    <X size={24} />
+                                </button>
+                            </div>
+
+                            <h2 className="text-3xl font-black italic tracking-tighter mb-6">
+                                <span className="text-neon-cyan neon-text-cyan">RING OF FIRE</span>
+                            </h2>
+
+                            <div className="space-y-6 text-white/60">
+                                <div className="space-y-2">
+                                    <h3 className="text-white font-bold text-sm uppercase tracking-widest">How to Play</h3>
+                                    <p className="text-sm leading-relaxed">Players take turns drawing a card from the circle. Each card rank corresponds to a specific rule. If a player draws the 4th King, they must drink the entire 'King's Cup' and the game ends.</p>
+                                </div>
+
+                                <div className="space-y-4">
+                                    <h3 className="text-white font-bold text-sm uppercase tracking-widest">Core Rules</h3>
+                                    <ul className="space-y-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                                        {rules.map((rule) => (
+                                            <li key={rule.rank} className="flex gap-3 text-[12px] border-b border-white/5 pb-2 last:border-0">
+                                                <span className="text-white font-black min-w-[20px]">{rule.rank}:</span>
+                                                <span>{rule.title} - {rule.description}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+
+                                <div className="pt-4">
+                                    <NeonButton variant="cyan" onClick={() => setShowInfo(false)} className="w-full">Start Playing!</NeonButton>
+                                </div>
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <div className="relative w-full max-w-6xl flex-1 flex flex-col lg:flex-row items-center justify-center gap-12">
                 {/* The Circular Deck */}
@@ -309,6 +366,6 @@ export default function RingOfFirePage() {
             {/* Background Decorative Elements */}
             <div className="fixed top-[-10%] right-[-10%] w-[50%] h-[50%] bg-neon-cyan/5 blur-[120px] rounded-full -z-10" />
             <div className="fixed bottom-[-10%] left-[-10%] w-[50%] h-[50%] bg-neon-purple/5 blur-[120px] rounded-full -z-10" />
-        </main>
+        </main >
     );
 }
