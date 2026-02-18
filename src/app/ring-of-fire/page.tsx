@@ -177,13 +177,13 @@ export default function RingOfFirePage() {
                     </div>
                 </div>
 
-                {/* King Indicators (Floating on the side or overlay) */}
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 hidden md:flex flex-col gap-4 z-40">
+                {/* King Indicators (Responsive: Bottom on mobile, Side on desktop) */}
+                <div className="fixed bottom-6 left-1/2 -translate-x-1/2 md:absolute md:left-4 md:top-1/2 md:-translate-y-1/2 md:translate-x-0 flex md:flex-col gap-3 md:gap-4 z-40 bg-black/20 backdrop-blur-md p-3 md:p-0 rounded-2xl md:bg-transparent md:backdrop-blur-none">
                     {[1, 2, 3, 4].map((i) => (
                         <motion.div
                             key={i}
                             animate={i <= kingCount ? { scale: [1, 1.2, 1], rotate: [0, 10, -10, 0] } : {}}
-                            className={`w-12 h-12 rounded-2xl border-2 flex items-center justify-center font-bold text-lg transition-all duration-500 overflow-hidden relative ${i <= kingCount
+                            className={`w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl border-2 flex items-center justify-center font-bold text-base md:text-lg transition-all duration-500 overflow-hidden relative ${i <= kingCount
                                 ? "border-neon-pink bg-neon-pink/20 text-neon-pink shadow-[0_0_20px_#ff007f55]"
                                 : "border-white/5 text-white/10 bg-white/5"
                                 }`}
@@ -198,7 +198,7 @@ export default function RingOfFirePage() {
                             )}
                         </motion.div>
                     ))}
-                    <span className="text-[10px] uppercase tracking-widest text-white/20 font-bold text-center mt-2">Kings</span>
+                    <span className="hidden md:block text-[10px] uppercase tracking-widest text-white/20 font-bold text-center mt-2">Kings</span>
                 </div>
 
                 {/* Rule Display Column */}
