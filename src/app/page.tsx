@@ -2,11 +2,11 @@
 
 import { NeonButton } from "@/components/ui/NeonButton";
 import { motion } from "framer-motion";
-import { Wine, Flame, Settings, Dices, Layers, Crown, UserPlus, HelpCircle } from "lucide-react";
+import { Wine, Flame, Settings, Dices, Layers, Crown, UserPlus, HelpCircle, Ticket } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-type Category = "all" | "cards" | "dice";
+type Category = "all" | "cards" | "dice" | "party";
 
 export default function Home() {
   const [category, setCategory] = useState<Category>("all");
@@ -23,8 +23,13 @@ export default function Home() {
     { id: 'liars-dice', title: 'Liars Dice', active: false, icon: <HelpCircle className="text-white/20" />, desc: 'Bluff your way to victory in this classic game of dice.' },
   ];
 
-  const filteredCards = category === "dice" ? [] : cardGames;
-  const filteredDice = category === "cards" ? [] : diceGames;
+  const partyGames = [
+    { id: 'housie-tambola', title: 'Housie / Tambola', active: true, icon: <Ticket className="text-neon-pink" />, desc: 'Call numbers, mark your ticket, and make losers drink. Party bingo at its finest.' },
+  ];
+
+  const filteredCards = category === "dice" || category === "party" ? [] : cardGames;
+  const filteredDice = category === "cards" || category === "party" ? [] : diceGames;
+  const filteredParty = category === "cards" || category === "dice" ? [] : partyGames;
 
   return (
     <main className="min-h-screen flex flex-col items-center p-8 text-white bg-dark-bg">
@@ -45,7 +50,7 @@ export default function Home() {
 
       {/* Category Tabs */}
       <div className="flex gap-4 mb-12 glass p-2 rounded-2xl border-white/5">
-        {(["all", "cards", "dice"] as Category[]).map((cat) => (
+        {(["all", "cards", "dice", "party"] as Category[]).map((cat) => (
           <button
             key={cat}
             onClick={() => setCategory(cat)}
@@ -78,6 +83,18 @@ export default function Home() {
             <h3 className="text-xs uppercase tracking-[0.5em] text-neon-pink neon-text-pink font-bold mb-8 text-center">Dice Duels</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredDice.map((game) => (
+                <GameCard key={game.id} game={game} />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Party Games Section */}
+        {filteredParty.length > 0 && (
+          <section>
+            <h3 className="text-xs uppercase tracking-[0.5em] text-neon-purple font-bold mb-8 text-center" style={{ textShadow: '0 0 5px #bc13fe, 0 0 10px #bc13fe' }}>Party Games</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredParty.map((game) => (
                 <GameCard key={game.id} game={game} />
               ))}
             </div>
